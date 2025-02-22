@@ -1,0 +1,5 @@
+C:\Users\rthor\OneDrive\Documents\MyCode\AzureRoleCheck\obj\Debug\net9.0\AzureRoleCheck.csproj.AssemblyReference.cache
+C:\Users\rthor\OneDrive\Documents\MyCode\AzureRoleCheck\obj\Debug\net9.0\AzureRoleCheck.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\rthor\OneDrive\Documents\MyCode\AzureRoleCheck\obj\Debug\net9.0\AzureRoleCheck.AssemblyInfoInputs.cache
+C:\Users\rthor\OneDrive\Documents\MyCode\AzureRoleCheck\obj\Debug\net9.0\AzureRoleCheck.AssemblyInfo.cs
+C:\Users\rthor\OneDrive\Documents\MyCode\AzureRoleCheck\obj\Debug\net9.0\AzureRoleCheck.csproj.CoreCompileInputs.cache
