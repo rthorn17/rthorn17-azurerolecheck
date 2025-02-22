@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "yaWmyS1e4zY=",
+  "dgSpecHash": "qb8AtvuhQqI=",
   "success": true,
-  "projectFilePath": "c:\\Users\\rthor\\OneDrive\\Documents\\MyCode\\AzureRoleCheck\\AzureRoleCheck.csproj",
+  "projectFilePath": "C:\\Users\\rthor\\OneDrive\\Documents\\MyCode\\AzureRoleCheck\\AzureRoleCheck.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\rthor\\.nuget\\packages\\azure.core\\1.44.1\\azure.core.1.44.1.nupkg.sha512",
     "C:\\Users\\rthor\\.nuget\\packages\\azure.identity\\1.13.2\\azure.identity.1.13.2.nupkg.sha512",

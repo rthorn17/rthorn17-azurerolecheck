@@ -7,7 +7,7 @@ using Azure.ResourceManager;
 using Azure.ResourceManager.Authorization;
 using Azure.ResourceManager.ManagementGroups;
 using Azure.ResourceManager.Resources;
-using Azure.ResourceManager.Authorization.Models;
+
 
 class Program
 {
@@ -35,13 +35,13 @@ class Program
 
         // ✅ Fetch Role Assignments
         Console.WriteLine("\nFetching current role assignments at the subscription level...");
-        var currentRoles = await GetRoleAssignmentsAsync(credential, $"/subscriptions/{subscriptionId}");
+        var currentRoles = await GetRoleAssignmentsAsync(client, $"/subscriptions/{subscriptionId}");
 
         Console.WriteLine("\nFetching inherited role assignments from current management group...");
-        var inheritedRolesCurrent = await GetRoleAssignmentsAsync(credential, $"/providers/Microsoft.Management/managementGroups/{currentManagementGroupId}");
+        var inheritedRolesCurrent = await GetRoleAssignmentsAsync(client, $"/providers/Microsoft.Management/managementGroups/{currentManagementGroupId}");
 
         Console.WriteLine("\nFetching inherited role assignments from target management group...");
-        var inheritedRolesTarget = await GetRoleAssignmentsAsync(credential, $"/providers/Microsoft.Management/managementGroups/{targetManagementGroupId}");
+        var inheritedRolesTarget = await GetRoleAssignmentsAsync(client, $"/providers/Microsoft.Management/managementGroups/{targetManagementGroupId}");
 
         // ✅ Compare Role Assignments
         var rolesLost = inheritedRolesCurrent.Except(inheritedRolesTarget).ToList();
@@ -49,7 +49,7 @@ class Program
 
         // ✅ Display Results
         Console.WriteLine("\n=== Role Changes Preview ===");
-        
+
         if (rolesLost.Count > 0)
         {
             Console.WriteLine("\nRoles that will be LOST:");
@@ -80,26 +80,25 @@ class Program
     /// <summary>
     /// Retrieves role assignments for a given Azure resource scope (Subscription or Management Group).
     /// </summary>
-    static async Task<List<string>> GetRoleAssignmentsAsync(DefaultAzureCredential credential, string scope)
+    static async Task<List<RoleAssignmentResource>> GetRoleAssignmentsAsync(ArmClient client, string scope)
     {
-        var roleAssignments = new List<string>();
-
+        var roleAssignments = new List<RoleAssignmentResource>();
+    
         try
         {
-            // ✅ Use AuthorizationManagementClient
-            var authClient = new AuthorizationManagementClient(new Uri("https://management.azure.com/"), credential);
-
-            // Fetch role assignments for the scope
-            await foreach (var roleAssignment in authClient.RoleAssignments.ListAsync(scope))
+            // Fetch role assignments for the given scope (Subscription or Management Group)
+            var roleAssignmentsResult = await GetRoleAssignmentsAsync(client, scope);
+            foreach (var roleAssignment in roleAssignmentsResult)
             {
-                roleAssignments.Add(roleAssignment.RoleDefinitionId);
+                // Add Role Definition ID to the list
+                roleAssignments.Add(roleAssignment);
             }
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error fetching role assignments for {scope}: {ex.Message}");
         }
-
+    
         return roleAssignments;
     }
 }

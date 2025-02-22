@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\rthor\\OneDrive\\Documents\\MyCode\\AzureRoleCheck\\AzureRoleCheck.csproj": {}
+    "C:\\Users\\rthor\\OneDrive\\Documents\\MyCode\\AzureRoleCheck\\AzureRoleCheck.csproj": {}
   },
   "projects": {
-    "c:\\Users\\rthor\\OneDrive\\Documents\\MyCode\\AzureRoleCheck\\AzureRoleCheck.csproj": {
+    "C:\\Users\\rthor\\OneDrive\\Documents\\MyCode\\AzureRoleCheck\\AzureRoleCheck.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\rthor\\OneDrive\\Documents\\MyCode\\AzureRoleCheck\\AzureRoleCheck.csproj",
+        "projectUniqueName": "C:\\Users\\rthor\\OneDrive\\Documents\\MyCode\\AzureRoleCheck\\AzureRoleCheck.csproj",
         "projectName": "AzureRoleCheck",
-        "projectPath": "c:\\Users\\rthor\\OneDrive\\Documents\\MyCode\\AzureRoleCheck\\AzureRoleCheck.csproj",
+        "projectPath": "C:\\Users\\rthor\\OneDrive\\Documents\\MyCode\\AzureRoleCheck\\AzureRoleCheck.csproj",
         "packagesPath": "C:\\Users\\rthor\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\rthor\\OneDrive\\Documents\\MyCode\\AzureRoleCheck\\obj\\",
+        "outputPath": "C:\\Users\\rthor\\OneDrive\\Documents\\MyCode\\AzureRoleCheck\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\rthor\\AppData\\Roaming\\NuGet\\NuGet.Config"
