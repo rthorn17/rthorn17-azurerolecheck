@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/richardthorn/MyProjects/https---github.com-rthorn17-azurerolecheck/AzureRoleCheck/AzureRoleCheck.csproj": {}
+    "/Users/richardthorn/MyProjects/azurerolecheck/AzureRoleCheck/AzureRoleCheck.csproj": {}
   },
   "projects": {
-    "/Users/richardthorn/MyProjects/https---github.com-rthorn17-azurerolecheck/AzureRoleCheck/AzureRoleCheck.csproj": {
+    "/Users/richardthorn/MyProjects/azurerolecheck/AzureRoleCheck/AzureRoleCheck.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/richardthorn/MyProjects/https---github.com-rthorn17-azurerolecheck/AzureRoleCheck/AzureRoleCheck.csproj",
+        "projectUniqueName": "/Users/richardthorn/MyProjects/azurerolecheck/AzureRoleCheck/AzureRoleCheck.csproj",
         "projectName": "AzureRoleCheck",
-        "projectPath": "/Users/richardthorn/MyProjects/https---github.com-rthorn17-azurerolecheck/AzureRoleCheck/AzureRoleCheck.csproj",
+        "projectPath": "/Users/richardthorn/MyProjects/azurerolecheck/AzureRoleCheck/AzureRoleCheck.csproj",
         "packagesPath": "/Users/richardthorn/.nuget/packages/",
-        "outputPath": "/Users/richardthorn/MyProjects/https---github.com-rthorn17-azurerolecheck/AzureRoleCheck/obj/",
+        "outputPath": "/Users/richardthorn/MyProjects/azurerolecheck/AzureRoleCheck/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/richardthorn/.nuget/NuGet/NuGet.Config"
