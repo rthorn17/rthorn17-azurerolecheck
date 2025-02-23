@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AzureRoleCheck")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7d0ba1fb87eedecfa8c8bec719d7b028b2a95755")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+87f6ba9688e23a742249283c2c124ac4643e5989")]
 [assembly: System.Reflection.AssemblyProductAttribute("AzureRoleCheck")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AzureRoleCheck")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

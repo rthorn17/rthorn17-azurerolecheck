@@ -1,41 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Azure.Core;
 using Azure.Identity;
 using Azure.ResourceManager;
 using Azure.ResourceManager.Authorization;
+using Azure.ResourceManager.Authorization.Mocking;
 using Azure.ResourceManager.ManagementGroups;
 using Azure.ResourceManager.Resources;
-
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 class Program
 {
     static async Task Main(string[] args)
     {
-        Console.Write("Enter the Subscription ID: ");
-        string subscriptionId = Console.ReadLine();
+        
+        // Get user input for Subscription ID and Management Groups
+        //Console.Write("Enter the Subscription ID: ");
+        //string subscriptionId = Console.ReadLine();
+      
+        //Console.Write("Enter Current Management Group ID: ");
+        //string currentManagementGroupId = Console.ReadLine();
+        string currentManagementGroupId = "eportales";
 
-        Console.Write("Enter Current Management Group ID: ");
-        string currentManagementGroupId = Console.ReadLine();
+        //Console.Write("Enter Target Management Group ID: ");
+        //string targetManagementGroupId = Console.ReadLine();
+        string targetManagementGroupId = "ContosoRootManagementgroup";
+        
 
-        Console.Write("Enter Target Management Group ID: ");
-        string targetManagementGroupId = Console.ReadLine();
+        string subscriptionId = "e6b1f24d-85ce-4fe2-8a32-3e9d38ad9a05";
+        string scope = $"/subscriptions/{subscriptionId}";
 
-        // ✅ Authenticate using DefaultAzureCredential
+        // Authenticate using DefaultAzureCredential
         var credential = new DefaultAzureCredential();
         var client = new ArmClient(credential);
 
-        // ✅ Get Subscription Resource
-        SubscriptionResource subscription = client.GetSubscriptionResource(new Azure.Core.ResourceIdentifier($"/subscriptions/{subscriptionId}"));
+        // Get Subscription Resource
+        SubscriptionResource subscription = await client.GetDefaultSubscriptionAsync();
 
-        // ✅ Get Management Group Resources
+        // Get Management Group Resources
         ManagementGroupResource currentManagementGroup = client.GetManagementGroupResource(ManagementGroupResource.CreateResourceIdentifier(currentManagementGroupId));
         ManagementGroupResource targetManagementGroup = client.GetManagementGroupResource(ManagementGroupResource.CreateResourceIdentifier(targetManagementGroupId));
 
-        // ✅ Fetch Role Assignments
+        // Fetch Role Assignments
         Console.WriteLine("\nFetching current role assignments at the subscription level...");
-        var currentRoles = await GetRoleAssignmentsAsync(client, $"/subscriptions/{subscriptionId}");
+        var currentRoles = await GetRoleAssignmentsAsync(client, scope);
 
         Console.WriteLine("\nFetching inherited role assignments from current management group...");
         var inheritedRolesCurrent = await GetRoleAssignmentsAsync(client, $"/providers/Microsoft.Management/managementGroups/{currentManagementGroupId}");
@@ -43,13 +53,12 @@ class Program
         Console.WriteLine("\nFetching inherited role assignments from target management group...");
         var inheritedRolesTarget = await GetRoleAssignmentsAsync(client, $"/providers/Microsoft.Management/managementGroups/{targetManagementGroupId}");
 
-        // ✅ Compare Role Assignments
+        // Compare Role Assignments
         var rolesLost = inheritedRolesCurrent.Except(inheritedRolesTarget).ToList();
         var rolesGained = inheritedRolesTarget.Except(inheritedRolesCurrent).ToList();
 
-        // ✅ Display Results
+        // Display Results
         Console.WriteLine("\n=== Role Changes Preview ===");
-
         if (rolesLost.Count > 0)
         {
             Console.WriteLine("\nRoles that will be LOST:");
@@ -80,25 +89,43 @@ class Program
     /// <summary>
     /// Retrieves role assignments for a given Azure resource scope (Subscription or Management Group).
     /// </summary>
-    static async Task<List<RoleAssignmentResource>> GetRoleAssignmentsAsync(ArmClient client, string scope)
+static async Task<List<string>> GetRoleAssignmentsAsync(ArmClient client, string scope)
+{
+    var roleAssignments = new List<string>();
+
+    try
     {
-        var roleAssignments = new List<RoleAssignmentResource>();
-    
-        try
+        RoleAssignmentCollection roleAssignmentsCollection;
+
+        // ✅ Determine whether the scope is a Subscription or Management Group
+        if (scope.StartsWith("/subscriptions/"))
         {
-            // Fetch role assignments for the given scope (Subscription or Management Group)
-            var roleAssignmentsResult = await GetRoleAssignmentsAsync(client, scope);
-            foreach (var roleAssignment in roleAssignmentsResult)
-            {
-                // Add Role Definition ID to the list
-                roleAssignments.Add(roleAssignment);
-            }
+            var subscription = client.GetSubscriptionResource(new ResourceIdentifier(scope));
+            roleAssignmentsCollection = subscription.GetRoleAssignments();
         }
-        catch (Exception ex)
+        else if (scope.StartsWith("/providers/Microsoft.Management/managementGroups/"))
         {
-            Console.WriteLine($"Error fetching role assignments for {scope}: {ex.Message}");
+            var managementGroup = client.GetManagementGroupResource(new ResourceIdentifier(scope));
+            roleAssignmentsCollection = managementGroup.GetRoleAssignments();
         }
-    
-        return roleAssignments;
+        else
+        {
+            throw new ArgumentException("Invalid scope. Must be a Subscription or Management Group.");
+        }
+
+        // ✅ Loop through role assignments and store RoleDefinitionId
+        await foreach (RoleAssignmentResource roleAssignment in roleAssignmentsCollection.GetAllAsync())
+        {
+            roleAssignments.Add(roleAssignment.Data.RoleDefinitionId);
+        }
     }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error fetching role assignments for {scope}: {ex.Message}");
+    }
+
+    return roleAssignments;
+}
+
+
 }
