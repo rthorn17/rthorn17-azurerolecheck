@@ -141,26 +141,30 @@ class Program
         var policyAssignments = new List<string>();
         try
         {
-            PolicyAssignmentCollection policyAssignmentCollection;
+            var policyAssignmentCollection = new List<PolicyAssignmentResource>();
 
             if (scope.StartsWith("/subscriptions/"))
             {
                 var subscription = client.GetSubscriptionResource(new ResourceIdentifier(scope));
-                policyAssignmentCollection = subscription.GetPolicyAssignments();
+                await foreach (var policyAssignment in subscription.GetPolicyAssignments().GetAllAsync())
+                {
+                    policyAssignmentCollection.Add(policyAssignment);
+                }
             }
             else if (scope.StartsWith("/providers/Microsoft.Management/managementGroups/"))
             {
                 var managementGroup = client.GetManagementGroupResource(new ResourceIdentifier(scope));
-
-                // ✅ Apply the required filter "atScope()"
-                policyAssignmentCollection = managementGroup.GetPolicyAssignments();
+                await foreach (var policyAssignment in managementGroup.GetPolicyAssignments().GetAllAsync(filter: "atScope()"))
+                {
+                    policyAssignmentCollection.Add(policyAssignment);
+                }
             }
             else
             {
                 throw new ArgumentException("Invalid scope. Must be a Subscription or Management Group.");
             }
 
-            await foreach (var policyAssignment in policyAssignmentCollection.GetAllAsync())
+            foreach (var policyAssignment in policyAssignmentCollection)
             {
                 string policyInfo = $"Policy Assignment: {policyAssignment.Data.DisplayName}, PolicyDefinitionId: {policyAssignment.Data.PolicyDefinitionId}, Scope: {policyAssignment.Data.Scope}";
                 Console.WriteLine(policyInfo);
