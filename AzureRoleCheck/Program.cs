@@ -92,7 +92,7 @@ class Program
 static async Task<List<string>> GetRoleAssignmentsAsync(ArmClient client, string scope)
 {
     var roleAssignments = new List<string>();
-
+    
     try
     {
         RoleAssignmentCollection roleAssignmentsCollection;
@@ -117,6 +117,13 @@ static async Task<List<string>> GetRoleAssignmentsAsync(ArmClient client, string
         await foreach (RoleAssignmentResource roleAssignment in roleAssignmentsCollection.GetAllAsync())
         {
             roleAssignments.Add(roleAssignment.Data.RoleDefinitionId);
+        }
+         // ✅ Loop through role assignments and print them to the console
+        await foreach (RoleAssignmentResource roleAssignment in roleAssignmentsCollection.GetAllAsync())
+        {
+            string roleInfo = $"Role Assignment: {roleAssignment.Data.RoleDefinitionId}, PrincipalId: {roleAssignment.Data.PrincipalId}, Scope: {roleAssignment.Data.Scope}";
+            Console.WriteLine(roleInfo);
+            roleAssignments.Add(roleInfo);
         }
     }
     catch (Exception ex)
